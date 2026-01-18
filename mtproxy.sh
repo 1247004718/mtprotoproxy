@@ -4,8 +4,7 @@
 apt update -y && apt install -y  python3 python3-pip openssl wget git xxd && cd /opt
 git clone https://github.com/1247004718/mtprotoproxy.git && cd mtprotoproxy/
 secret=$(openssl rand -hex 16)
-echo "TG: $secret"
-#secret=faf5a3fc4520898e73bcefc4a12432a0
+
 function get_ip_public() {
     public_ip=$(curl -s https://api.ip.sb/ip -A Mozilla --ipv4)
     [ -z "$public_ip" ] && public_ip=$(curl -s ipinfo.io/ip -A Mozilla --ipv4)
@@ -50,20 +49,19 @@ while true; do
 
 
 while true; do
-	public_ip=$(get_ip_public)
+	    public_ip=$(get_ip_public)
         default_tag=""
         echo -e "请输入你需要推广的TAG："
         echo -e "若没有,请联系 @MTProxybot 进一步创建你的TAG, 可能需要信息如下："
-        echo -e "IP: ${public_ip}"
-        echo -e "PORT: ${input_port}"
+        echo -e "IP&PORT ${public_ip}:${input_port}"
         echo -e "SECRET(可以随便填): ${secret}"
         read -p "(留空则跳过):" input_tag
         [ -z "${input_tag}" ] && input_tag=${default_tag}
         if [ -z "$input_tag" ] || [[ "$input_tag" =~ ^[A-Za-z0-9]{32}$ ]]; then
             echo
-            echo "---------------------------"
+            echo "\033[31m---------------------------\033[0m"
             echo "PROXY TAG = ${input_tag}"
-            echo "---------------------------"
+            echo "\033[31m---------------------------\033[0m"
             echo
             break
         fi
@@ -77,7 +75,6 @@ public_ip=$(get_ip_public)
 cat > ./config.py <<EOF
 PORT = ${input_port}
 USERS = {
-    # 32位16进制字符串
     "tg":  "${secret}",
 }
 MODES = {
@@ -98,15 +95,15 @@ echo -e "AD_TAG = \"${input_tag}\"" >> ./config.py
 fi
 
 cp mtp.service /etc/systemd/system/mtp.service
-# 重载
 echo 'reload daemon'
 systemctl daemon-reload
-# 重启服务
+systemctl enable mtp.service
 echo 'restart service'
 systemctl restart mtp.service
 systemctl status mtp.service
 
-
+echo -e "TG一键链接: https://t.me/proxy?server=${public_ip}&port=${input_port}&secret=${client_secret}" > ./mtpinfo.txt
+echo -e "TG一键链接: tg://proxy?server=${public_ip}&port=${input_port}&secret=${client_secret}" >> ./mtpinfo.txt
 echo -e "TMProxy+TLS代理: \033[32m运行中\033[0m"
 echo -e "服务器IP：\033[31m$public_ip\033[0m"
 echo -e "服务器端口：\033[31m${input_port}\033[0m"
