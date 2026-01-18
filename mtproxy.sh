@@ -1,11 +1,11 @@
 #!/bin/bash
 ## edited by qq1247004718
 ##date 2026-01-18
-#apt update -y && apt install -y  python3 python3-pip openssl wget git xxd && cd /opt
-#git clone https://github.com/1247004718/mtprotoproxy.git && cd mtprotoproxy/
+apt update -y && apt install -y  python3 python3-pip openssl wget git xxd && cd /opt
+git clone https://github.com/1247004718/mtprotoproxy.git && cd mtprotoproxy/
 secret=$(openssl rand -hex 16)
 echo "TG: $secret"
-secret=faf5a3fc4520898e73bcefc4a12432a0
+#secret=faf5a3fc4520898e73bcefc4a12432a0
 function get_ip_public() {
     public_ip=$(curl -s https://api.ip.sb/ip -A Mozilla --ipv4)
     [ -z "$public_ip" ] && public_ip=$(curl -s ipinfo.io/ip -A Mozilla --ipv4)
@@ -96,6 +96,17 @@ EOF
 if [ ! -z ${input_tag} ];then
 echo -e "AD_TAG = ${input_tag}" >> ./config.py
 fi
+
+cp mtp.service /etc/systemd/system/mtp.service
+# 重载
+echo 'reload daemon'
+systemctl daemon-reload
+# 重启服务
+echo 'restart service'
+systemctl restart mtp.service
+systemctl status mtp.service
+
+
 echo -e "TMProxy+TLS代理: \033[32m运行中\033[0m"
 echo -e "服务器IP：\033[31m$public_ip\033[0m"
 echo -e "服务器端口：\033[31m${input_port}\033[0m"
