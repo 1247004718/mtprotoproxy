@@ -59,7 +59,7 @@ while true; do
         [ -z "${input_tag}" ] && input_tag=${default_tag}
         if [ -z "$input_tag" ] || [[ "$input_tag" =~ ^[A-Za-z0-9]{32}$ ]]; then
             echo
-            echo -e"\033[31m---------------------------\033[0m"
+            echo -e  "\033[31m---------------------------\033[0m"
             echo "PROXY TAG = ${input_tag}"
             echo -e "\033[31m---------------------------\033[0m"
             echo
