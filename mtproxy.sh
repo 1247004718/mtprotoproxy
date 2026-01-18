@@ -59,9 +59,9 @@ while true; do
         [ -z "${input_tag}" ] && input_tag=${default_tag}
         if [ -z "$input_tag" ] || [[ "$input_tag" =~ ^[A-Za-z0-9]{32}$ ]]; then
             echo
-            echo "\033[31m---------------------------\033[0m"
+            echo -e"\033[31m---------------------------\033[0m"
             echo "PROXY TAG = ${input_tag}"
-            echo "\033[31m---------------------------\033[0m"
+            echo -e "\033[31m---------------------------\033[0m"
             echo
             break
         fi
@@ -94,19 +94,18 @@ if [ ! -z ${input_tag} ];then
 echo -e "AD_TAG = \"${input_tag}\"" >> ./config.py
 fi
 
-cp mtp.service /etc/systemd/system/mtp.service
-echo 'reload daemon'
-systemctl daemon-reload
-systemctl enable mtp.service
-echo 'restart service'
-systemctl restart mtp.service
-systemctl status mtp.service
-
-echo -e "TG一键链接: https://t.me/proxy?server=${public_ip}&port=${input_port}&secret=${client_secret}" > ./mtpinfo.txt
-echo -e "TG一键链接: tg://proxy?server=${public_ip}&port=${input_port}&secret=${client_secret}" >> ./mtpinfo.txt
 echo -e "TMProxy+TLS代理: \033[32m运行中\033[0m"
 echo -e "服务器IP：\033[31m$public_ip\033[0m"
 echo -e "服务器端口：\033[31m${input_port}\033[0m"
 echo -e "MTProxy Secret:  \033[31m$client_secret\033[0m"
 echo -e "TG一键链接: https://t.me/proxy?server=${public_ip}&port=${input_port}&secret=${client_secret}"
 echo -e "TG一键链接: tg://proxy?server=${public_ip}&port=${input_port}&secret=${client_secret}"
+
+echo -e "TG一键链接: https://t.me/proxy?server=${public_ip}&port=${input_port}&secret=${client_secret}" > ./mtpinfo.txt
+echo -e "TG一键链接: tg://proxy?server=${public_ip}&port=${input_port}&secret=${client_secret}" >> ./mtpinfo.txt
+cp mtp.service /etc/systemd/system/mtp.service
+systemctl daemon-reload
+systemctl enable mtp.service
+echo 'restart service'
+systemctl restart mtp.service
+systemctl status mtp.service
