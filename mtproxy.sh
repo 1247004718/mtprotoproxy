@@ -94,7 +94,7 @@ TLS_DOMAIN = "${input_domain}"
 EOF
 
 if [ ! -z ${input_tag} ];then
-echo -e "AD_TAG = ${input_tag}" >> ./config.py
+echo -e "AD_TAG = \"${input_tag}\"" >> ./config.py
 fi
 
 cp mtp.service /etc/systemd/system/mtp.service
