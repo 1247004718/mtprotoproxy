@@ -104,8 +104,4 @@ echo -e "TG一键链接: tg://proxy?server=${public_ip}&port=${input_port}&secre
 echo -e "TG一键链接: https://t.me/proxy?server=${public_ip}&port=${input_port}&secret=${client_secret}" > ./mtpinfo.txt
 echo -e "TG一键链接: tg://proxy?server=${public_ip}&port=${input_port}&secret=${client_secret}" >> ./mtpinfo.txt
 cp mtp.service /etc/systemd/system/mtp.service
-systemctl daemon-reload
-systemctl enable mtp.service
-echo 'restart service'
-systemctl restart mtp.service
-systemctl status mtp.service
+systemctl daemon-reload && systemctl enable mtp.service && systemctl restart mtp.service && systemctl status mtp.service
